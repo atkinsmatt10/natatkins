@@ -23,11 +23,11 @@ export default function RootLayout({
 
 export const metadata = {
   title: {
-    default: 'Nate Atkins - Artist Portfolio',
+    default: "Nate Atkins's corner of the internet",
     template: '%s | Nate Atkins'
   },
-  description: 'Artist portfolio of Nate Atkins - Currently on Earth, excited to explore the stars. Digital art, space-themed creations, and futuristic designs.',
-  keywords: ['artist', 'portfolio', 'digital art', 'space art', 'futuristic design', 'Nate Atkins'],
+  description: "Nate Atkins's corner of the internet - Currently on Earth, excited to explore the stars. Digital art, space-themed creations, and futuristic designs.",
+  keywords: ['nate atkins', 'digital art', 'space art', 'futuristic design', 'creative corner', 'internet corner'],
   authors: [{ name: 'Nate Atkins' }],
   creator: 'Nate Atkins',
   publisher: 'Nate Atkins',
@@ -46,14 +46,14 @@ export const metadata = {
     type: 'website',
     locale: 'en_US',
     url: 'https://nateatkins.com',
-    title: 'Nate Atkins - Artist Portfolio',
-    description: 'Artist portfolio of Nate Atkins - Currently on Earth, excited to explore the stars. Digital art, space-themed creations, and futuristic designs.',
-    siteName: 'Nate Atkins Portfolio',
+    title: "Nate Atkins's corner of the internet",
+    description: "Nate Atkins's corner of the internet - Currently on Earth, excited to explore the stars. Digital art, space-themed creations, and futuristic designs.",
+    siteName: "Nate Atkins's corner of the internet",
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Nate Atkins - Artist Portfolio',
-    description: 'Artist portfolio of Nate Atkins - Currently on Earth, excited to explore the stars.',
+    title: "Nate Atkins's corner of the internet",
+    description: "Nate Atkins's corner of the internet - Currently on Earth, excited to explore the stars.",
     creator: '@nateatkins',
   },
   verification: {

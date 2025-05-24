@@ -1,6 +1,6 @@
 import { ImageResponse } from 'next/og'
 
-export const alt = 'Nate Atkins - Artist Portfolio'
+export const alt = "Nate Atkins's corner of the internet"
 export const size = {
   width: 1200,
   height: 630,
@@ -23,7 +23,7 @@ export default async function Image() {
           position: 'relative',
         }}
       >
-        {/* Stars background */}
+        {/* Stars background - More stars scattered */}
         <div
           style={{
             position: 'absolute',
@@ -79,6 +79,116 @@ export default async function Image() {
             borderRadius: '50%',
           }}
         />
+        <div
+          style={{
+            position: 'absolute',
+            top: '80px',
+            right: '400px',
+            width: '2px',
+            height: '2px',
+            background: 'white',
+            borderRadius: '50%',
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            top: '120px',
+            left: '500px',
+            width: '1px',
+            height: '1px',
+            background: 'white',
+            borderRadius: '50%',
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            bottom: '150px',
+            left: '80px',
+            width: '2px',
+            height: '2px',
+            background: 'white',
+            borderRadius: '50%',
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            top: '250px',
+            right: '100px',
+            width: '2px',
+            height: '2px',
+            background: 'white',
+            borderRadius: '50%',
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            bottom: '250px',
+            left: '400px',
+            width: '1px',
+            height: '1px',
+            background: 'white',
+            borderRadius: '50%',
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            top: '320px',
+            left: '150px',
+            width: '2px',
+            height: '2px',
+            background: 'white',
+            borderRadius: '50%',
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            top: '400px',
+            right: '350px',
+            width: '1px',
+            height: '1px',
+            background: 'white',
+            borderRadius: '50%',
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            bottom: '80px',
+            right: '180px',
+            width: '2px',
+            height: '2px',
+            background: 'white',
+            borderRadius: '50%',
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            top: '180px',
+            right: '50px',
+            width: '1px',
+            height: '1px',
+            background: 'white',
+            borderRadius: '50%',
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            bottom: '350px',
+            right: '80px',
+            width: '2px',
+            height: '2px',
+            background: 'white',
+            borderRadius: '50%',
+          }}
+        />
         
         {/* Main content */}
         <div
@@ -98,19 +208,20 @@ export default async function Image() {
               letterSpacing: '-2px',
               margin: '0',
               textShadow: '0 0 20px rgba(255,255,255,0.3)',
+              fontFamily: 'system-ui, -apple-system, sans-serif',
             }}
           >
             NATE ATKINS
           </h1>
           <p
             style={{
-              fontSize: '32px',
+              fontSize: '28px',
               margin: '20px 0',
               color: '#94a3b8',
               fontWeight: '300',
             }}
           >
-            Artist Portfolio
+            corner of the internet
           </p>
           <p
             style={{

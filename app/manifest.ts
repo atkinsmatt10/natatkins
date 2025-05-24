@@ -2,9 +2,9 @@ import { MetadataRoute } from 'next'
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Nate Atkins - Artist Portfolio',
+    name: "Nate Atkins's corner of the internet",
     short_name: 'Nate Atkins',
-    description: 'Artist portfolio of Nate Atkins - Currently on Earth, excited to explore the stars. Digital art, space-themed creations, and futuristic designs.',
+    description: "Nate Atkins's corner of the internet - Currently on Earth, excited to explore the stars. Digital art, space-themed creations, and futuristic designs.",
     start_url: '/',
     display: 'standalone',
     background_color: '#000000',
