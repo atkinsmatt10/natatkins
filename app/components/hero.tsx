@@ -156,7 +156,7 @@ export default function Hero() {
           </div>
         </motion.div>
       </div>
-      <div className="absolute bottom-10 left-0 right-0 flex flex-col items-center gap-2">
+      <div className="absolute bottom-24 sm:bottom-16 md:bottom-10 left-0 right-0 flex flex-col items-center gap-2">
         <motion.p
           className="text-center text-xs text-gray-500"
           initial={{ opacity: 0 }}
