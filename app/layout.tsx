@@ -22,5 +22,47 @@ export default function RootLayout({
 }
 
 export const metadata = {
-      generator: 'v0.dev'
-    };
+  title: {
+    default: 'Nate Atkins - Artist Portfolio',
+    template: '%s | Nate Atkins'
+  },
+  description: 'Artist portfolio of Nate Atkins - Currently on Earth, excited to explore the stars. Digital art, space-themed creations, and futuristic designs.',
+  keywords: ['artist', 'portfolio', 'digital art', 'space art', 'futuristic design', 'Nate Atkins'],
+  authors: [{ name: 'Nate Atkins' }],
+  creator: 'Nate Atkins',
+  publisher: 'Nate Atkins',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://nateatkins.com',
+    title: 'Nate Atkins - Artist Portfolio',
+    description: 'Artist portfolio of Nate Atkins - Currently on Earth, excited to explore the stars. Digital art, space-themed creations, and futuristic designs.',
+    siteName: 'Nate Atkins Portfolio',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Nate Atkins - Artist Portfolio',
+    description: 'Artist portfolio of Nate Atkins - Currently on Earth, excited to explore the stars.',
+    creator: '@nateatkins',
+  },
+  verification: {
+    google: 'verification_token',
+  },
+};
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+};
