@@ -56,6 +56,16 @@ export default function Hero() {
       size: number
       speedX: number
       speedY: number
+      trail: { x: number; y: number }[]
+      hasTrail: boolean
+      maxTrailLength: number
+      trailActive: boolean
+      trailTimer: number
+      trailDuration: number
+      trailCooldown: number
+      trailFading: boolean
+      fadeOutDuration: number
+      fadeOutTimer: number
 
       constructor() {
         this.x = Math.random() * canvas.width
@@ -63,24 +73,157 @@ export default function Hero() {
         this.size = Math.random() * 2 + 0.1
         this.speedX = Math.random() * 2 - 1
         this.speedY = Math.random() * 2 - 1
+        this.trail = []
+        // Only about 20% of particles will have trails (shooting stars)
+        this.hasTrail = Math.random() < 0.2
+        this.maxTrailLength = this.hasTrail ? Math.floor(Math.random() * 15) + 10 : 0
+        
+        // Trail timing properties
+        this.trailActive = false
+        this.trailTimer = 0
+        this.trailDuration = Math.random() * 120 + 60 // Trail active for 1-3 seconds
+        this.trailCooldown = Math.random() * 300 + 180 // Wait 3-8 seconds before next trail
+        this.trailFading = false
+        this.fadeOutDuration = 60 // 1 second fade out
+        this.fadeOutTimer = 0
+        
+        // Make shooting stars faster and larger when active
+        if (this.hasTrail) {
+          this.size = Math.random() * 1.5 + 1
+        }
       }
 
       update() {
+        // Handle trail timing for particles that can have trails
+        if (this.hasTrail) {
+          if (!this.trailActive && !this.trailFading && this.trailTimer >= this.trailCooldown) {
+            // Start trail
+            this.trailActive = true
+            this.trailTimer = 0
+            this.trail = []
+            // Speed up when trail becomes active
+            this.speedX *= 2.5
+            this.speedY *= 2.5
+          } else if (this.trailActive && this.trailTimer >= this.trailDuration) {
+            // Start fade out
+            this.trailActive = false
+            this.trailFading = true
+            this.fadeOutTimer = 0
+            // Slow down when trail starts fading
+            this.speedX /= 2.5
+            this.speedY /= 2.5
+          } else if (this.trailFading && this.fadeOutTimer >= this.fadeOutDuration) {
+            // Complete fade out
+            this.trailFading = false
+            this.trailTimer = 0
+            this.trail = []
+            // Set new random cooldown
+            this.trailCooldown = Math.random() * 300 + 180
+          }
+          
+          // Increment appropriate timer
+          if (this.trailActive) {
+            this.trailTimer++
+          } else if (this.trailFading) {
+            this.fadeOutTimer++
+          } else {
+            this.trailTimer++
+          }
+        }
+
+        // Add current position to trail if this particle has an active trail
+        if (this.hasTrail && this.trailActive) {
+          this.trail.push({ x: this.x, y: this.y })
+          if (this.trail.length > this.maxTrailLength) {
+            this.trail.shift()
+          }
+        } else if (this.hasTrail && this.trailFading) {
+          // During fade out, gradually shorten trail
+          const fadeProgress = this.fadeOutTimer / this.fadeOutDuration
+          const targetLength = Math.floor(this.trail.length * (1 - fadeProgress))
+          while (this.trail.length > targetLength && this.trail.length > 0) {
+            this.trail.shift()
+          }
+        }
+
         this.x += this.speedX
         this.y += this.speedY
 
-        if (this.x > canvas.width) this.x = 0
-        if (this.x < 0) this.x = canvas.width
-        if (this.y > canvas.height) this.y = 0
-        if (this.y < 0) this.y = canvas.height
+        if (this.x > canvas.width) {
+          this.x = 0
+          this.trail = [] // Reset trail when wrapping
+        }
+        if (this.x < 0) {
+          this.x = canvas.width
+          this.trail = []
+        }
+        if (this.y > canvas.height) {
+          this.y = 0
+          this.trail = []
+        }
+        if (this.y < 0) {
+          this.y = canvas.height
+          this.trail = []
+        }
       }
 
       draw() {
         if (!ctx) return
-        ctx.fillStyle = "rgba(255, 255, 255, 0.5)"
+        
+        // Draw trail if this particle has an active or fading trail
+        if (this.hasTrail && (this.trailActive || this.trailFading) && this.trail.length > 1) {
+          // Calculate fade multiplier for fading trails
+          let fadeMultiplier = 1
+          if (this.trailFading) {
+            fadeMultiplier = 1 - (this.fadeOutTimer / this.fadeOutDuration)
+          }
+          
+          ctx.strokeStyle = `rgba(255, 255, 255, ${0.8 * fadeMultiplier})`
+          ctx.lineWidth = this.size * 0.5
+          ctx.lineCap = "round"
+          
+          for (let i = 1; i < this.trail.length; i++) {
+            const alpha = (i / this.trail.length * 0.6) * fadeMultiplier // Fade trail with overall fade
+            ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`
+            ctx.lineWidth = (this.size * 0.5) * (i / this.trail.length)
+            
+            ctx.beginPath()
+            ctx.moveTo(this.trail[i - 1].x, this.trail[i - 1].y)
+            ctx.lineTo(this.trail[i].x, this.trail[i].y)
+            ctx.stroke()
+          }
+        }
+        
+        // Draw the particle itself
+        let particleAlpha = 0.5 // Default dim
+        if (this.hasTrail && this.trailActive) {
+          particleAlpha = 1 // Bright when active
+        } else if (this.hasTrail && this.trailFading) {
+          // Fade from bright to dim during fade out
+          const fadeProgress = this.fadeOutTimer / this.fadeOutDuration
+          particleAlpha = 1 - (fadeProgress * 0.5) // Fade from 1 to 0.5
+        }
+        
+        ctx.fillStyle = `rgba(255, 255, 255, ${particleAlpha})`
         ctx.beginPath()
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2)
         ctx.fill()
+        
+        // Add a slight glow for active and fading shooting stars
+        if (this.hasTrail && (this.trailActive || this.trailFading)) {
+          let glowAlpha = 0.8
+          if (this.trailFading) {
+            glowAlpha *= (1 - (this.fadeOutTimer / this.fadeOutDuration))
+          }
+          
+          ctx.shadowBlur = 10
+          ctx.shadowColor = `rgba(255, 255, 255, ${glowAlpha})`
+          ctx.fillStyle = `rgba(255, 255, 255, ${0.9 * (glowAlpha / 0.8)})`
+          ctx.beginPath()
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2)
+          ctx.fill()
+          ctx.shadowBlur = 0
+        }
       }
     }
 
