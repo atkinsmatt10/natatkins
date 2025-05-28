@@ -1,6 +1,7 @@
 import "@/styles/globals.css"
 import { Inter, Orbitron } from "next/font/google"
 import { Analytics } from '@vercel/analytics/next'
+import { ServiceWorkerRegistration, PWAInstaller } from './components/pwa-components'
 import type React from "react" // Import React
 
 const inter = Inter({ subsets: ["latin"] })
@@ -14,7 +15,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+        <ServiceWorkerRegistration />
         {children}
+        <PWAInstaller />
         <Analytics />
       </body>
     </html>
@@ -47,7 +50,7 @@ export const metadata = {
     locale: 'en_US',
     url: 'https://nateatkins.com',
     title: "Nate Atkins's corner of the internet",
-    description: "Nate Atkins's corner of the internet - Currently on Earth, excited to explore the stars. Digital art, space-themed creations, and futuristic designs.",
+    description: "Nate Atkins's corner of the internet - Currently on Earth, excited to explore the stars.",
     siteName: "Nate Atkins's corner of the internet",
   },
   twitter: {

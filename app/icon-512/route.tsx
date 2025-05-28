@@ -1,13 +1,8 @@
 import { ImageResponse } from 'next/og'
 
-export const size = {
-  width: 192,
-  height: 192,
-}
+export const runtime = 'edge'
 
-export const contentType = 'image/png'
-
-export default function Icon192() {
+export async function GET() {
   return new ImageResponse(
     (
       <div
@@ -20,15 +15,48 @@ export default function Icon192() {
           justifyContent: 'center',
           color: 'white',
           position: 'relative',
-          borderRadius: '20px',
+          borderRadius: '50px',
         }}
       >
-        {/* Stars scattered across the icon */}
+        {/* More stars for the larger icon */}
         <div
           style={{
             position: 'absolute',
-            top: '25px',
-            left: '35px',
+            top: '60px',
+            left: '90px',
+            width: '8px',
+            height: '8px',
+            background: 'white',
+            borderRadius: '50%',
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            top: '120px',
+            right: '80px',
+            width: '6px',
+            height: '6px',
+            background: 'white',
+            borderRadius: '50%',
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            bottom: '90px',
+            left: '110px',
+            width: '6px',
+            height: '6px',
+            background: 'white',
+            borderRadius: '50%',
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            top: '180px',
+            left: '160px',
             width: '4px',
             height: '4px',
             background: 'white',
@@ -38,10 +66,10 @@ export default function Icon192() {
         <div
           style={{
             position: 'absolute',
-            top: '45px',
-            right: '30px',
-            width: '3px',
-            height: '3px',
+            bottom: '150px',
+            right: '120px',
+            width: '6px',
+            height: '6px',
             background: 'white',
             borderRadius: '50%',
           }}
@@ -49,32 +77,10 @@ export default function Icon192() {
         <div
           style={{
             position: 'absolute',
-            bottom: '35px',
-            left: '45px',
-            width: '3px',
-            height: '3px',
-            background: 'white',
-            borderRadius: '50%',
-          }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            top: '70px',
-            left: '60px',
-            width: '2px',
-            height: '2px',
-            background: 'white',
-            borderRadius: '50%',
-          }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            bottom: '60px',
-            right: '50px',
-            width: '3px',
-            height: '3px',
+            top: '320px',
+            left: '200px',
+            width: '5px',
+            height: '5px',
             background: 'white',
             borderRadius: '50%',
           }}
@@ -83,10 +89,10 @@ export default function Icon192() {
         {/* Main icon - stylized "N" */}
         <div
           style={{
-            fontSize: '85px',
+            fontSize: '220px',
             fontWeight: 'bold',
-            letterSpacing: '-4px',
-            textShadow: '0 0 15px rgba(255,255,255,0.3)',
+            letterSpacing: '-10px',
+            textShadow: '0 0 30px rgba(255,255,255,0.3)',
           }}
         >
           N
@@ -94,7 +100,8 @@ export default function Icon192() {
       </div>
     ),
     {
-      ...size,
+      width: 512,
+      height: 512,
     }
   )
 } 
