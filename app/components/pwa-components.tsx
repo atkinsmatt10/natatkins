@@ -122,6 +122,11 @@ export function PushNotificationManager() {
       const vapidKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY
       addDebugInfo(`VAPID key length: ${vapidKey?.length || 0}`)
       
+      if (!vapidKey) {
+        addDebugInfo('❌ VAPID key not configured')
+        throw new Error('Push notifications not configured on this server')
+      }
+      
       const sub = await registration.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: vapidKey,

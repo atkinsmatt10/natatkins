@@ -2,14 +2,31 @@
 
 import webpush from 'web-push'
 
-// Set VAPID details (you'll need to generate these keys)
-if (process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
-  webpush.setVapidDetails(
-    'mailto:nateatkins10@gmail.com',
-    process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
-    process.env.VAPID_PRIVATE_KEY
-  )
+// Set VAPID details only if keys are properly configured
+function initializeVapidDetails() {
+  const publicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY
+  const privateKey = process.env.VAPID_PRIVATE_KEY
+  
+  if (!publicKey || !privateKey) {
+    console.warn('VAPID keys not configured. Push notifications will not work.')
+    return false
+  }
+
+  try {
+    webpush.setVapidDetails(
+      'mailto:nateatkins10@gmail.com',
+      publicKey,
+      privateKey
+    )
+    return true
+  } catch (error) {
+    console.error('Failed to set VAPID details:', error)
+    return false
+  }
 }
+
+// Initialize VAPID details
+const vapidConfigured = initializeVapidDetails()
 
 // In-memory storage for demo purposes
 // In production, you'd want to use a database
@@ -48,8 +65,9 @@ export async function unsubscribeUser(endpoint: string) {
 }
 
 export async function sendNotification(message: string) {
-  if (!process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || !process.env.VAPID_PRIVATE_KEY) {
-    return { success: false, error: 'VAPID keys not configured' }
+  if (!vapidConfigured) {
+    console.warn('VAPID not configured, cannot send notifications')
+    return { success: false, error: 'Push notifications not configured' }
   }
 
   if (subscriptions.length === 0) {

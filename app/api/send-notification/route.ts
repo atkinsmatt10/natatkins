@@ -39,4 +39,13 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     )
   }
+}
+
+// Add GET method to prevent build-time errors
+export async function GET() {
+  return NextResponse.json({ 
+    message: 'Push notification API endpoint',
+    methods: ['POST'],
+    usage: 'POST with { "message": "your message" }'
+  })
 } 
