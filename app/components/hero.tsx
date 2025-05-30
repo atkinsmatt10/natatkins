@@ -2,11 +2,145 @@
 
 import { useEffect, useRef, useState } from "react"
 import { motion } from "framer-motion"
+import { useUser, useAuth, SignUpButton, UserButton } from "@clerk/nextjs"
+
+// Custom Clerk appearance for space-themed sign-in/up
+const spaceClerkAppearance = {
+  layout: {
+    logoPlacement: 'inside' as const,
+    showOptionalFields: true,
+  },
+  variables: {
+    colorPrimary: '#4f46e5',
+    colorBackground: '#000000',
+    colorInputBackground: 'rgba(30, 30, 50, 0.8)',
+    colorInputText: '#ffffff',
+    colorText: '#ffffff',
+    colorTextSecondary: '#a1a1aa',
+    colorNeutral: '#27272a',
+    colorDanger: '#ef4444',
+    colorSuccess: '#22c55e',
+    borderRadius: '12px',
+    fontFamily: '"Inter", sans-serif',
+    fontSize: '14px',
+  },
+  elements: {
+    // Main container styling
+    card: {
+      backgroundColor: 'rgba(0, 0, 0, 0.95)',
+      border: '1px solid rgba(75, 85, 99, 0.3)',
+      borderRadius: '16px',
+      backdropFilter: 'blur(20px)',
+      boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 30px rgba(79, 70, 229, 0.2)',
+    },
+    
+    // Header with custom branding
+    headerTitle: {
+      color: '#ffffff',
+      fontSize: '24px',
+      fontWeight: '700',
+      textAlign: 'center',
+      marginBottom: '8px',
+    },
+    
+    headerSubtitle: {
+      color: '#a1a1aa',
+      fontSize: '14px',
+      textAlign: 'center',
+      marginBottom: '24px',
+    },
+    
+    // Form elements
+    formButtonPrimary: {
+      backgroundColor: '#4f46e5',
+      borderRadius: '8px',
+      border: 'none',
+      padding: '12px 24px',
+      fontSize: '14px',
+      fontWeight: '600',
+      transition: 'all 0.2s ease',
+      '&:hover': {
+        backgroundColor: '#4338ca',
+        transform: 'translateY(-1px)',
+        boxShadow: '0 4px 12px rgba(79, 70, 229, 0.4)',
+      },
+    },
+    
+    // Input fields
+    formFieldInput: {
+      backgroundColor: 'rgba(30, 30, 50, 0.8)',
+      border: '1px solid rgba(75, 85, 99, 0.3)',
+      borderRadius: '8px',
+      color: '#ffffff',
+      padding: '12px 16px',
+      fontSize: '14px',
+      '&:focus': {
+        borderColor: '#4f46e5',
+        boxShadow: '0 0 0 3px rgba(79, 70, 229, 0.1)',
+      },
+      '&::placeholder': {
+        color: '#6b7280',
+      },
+    },
+    
+    // Labels
+    formFieldLabel: {
+      color: '#d1d5db',
+      fontSize: '13px',
+      fontWeight: '500',
+      marginBottom: '6px',
+    },
+    
+    // Social buttons
+    socialButtonsBlockButton: {
+      backgroundColor: 'rgba(30, 30, 50, 0.6)',
+      border: '1px solid rgba(75, 85, 99, 0.3)',
+      borderRadius: '8px',
+      color: '#ffffff',
+      padding: '12px 16px',
+      transition: 'all 0.2s ease',
+      '&:hover': {
+        backgroundColor: 'rgba(30, 30, 50, 0.8)',
+        borderColor: '#4f46e5',
+      },
+    },
+    
+    // Footer links
+    footerActionLink: {
+      color: '#4f46e5',
+      fontSize: '14px',
+      fontWeight: '500',
+      '&:hover': {
+        color: '#6366f1',
+      },
+    },
+    
+    // Logo container
+    logoBox: {
+      height: '60px',
+      width: '60px',
+      margin: '0 auto 16px auto',
+    },
+    
+    // Loading spinner
+    spinner: {
+      color: '#4f46e5',
+      width: '20px',
+      height: '20px',
+    },
+  },
+  
+  // Custom logo component
+  logoImageUrl: '/icon-192',
+}
 
 export default function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   const [timeElapsed, setTimeElapsed] = useState("00:00:00:00")
+  const [isMounted, setIsMounted] = useState(false)
+  const { isSignedIn, isLoaded, user } = useUser()
+  const { userId } = useAuth()
 
   useEffect(() => {
     const startDate = new Date("May 2, 2025 14:30:00").getTime()
@@ -255,9 +389,147 @@ export default function Hero() {
     return () => window.removeEventListener("resize", handleResize)
   }, [])
 
+  // Ensure component is mounted to avoid hydration issues
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  // Safe check for any sign of authentication
+  const hasAnyUserSession = isSignedIn || userId || user
+
   return (
     <div className="relative h-screen w-full overflow-hidden">
       <canvas ref={canvasRef} className="absolute inset-0 h-full w-full bg-black" />
+      
+      {/* Realistic Moon-styled Fan Club Button - Top Right */}
+      {isMounted && isLoaded && (
+        <>
+          {!hasAnyUserSession && (
+            <motion.div
+              className="absolute top-6 right-6 z-20"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 2, delay: 1, ease: "easeOut" }}
+            >
+              <SignUpButton 
+                mode="modal"
+                appearance={spaceClerkAppearance}
+              >
+                <button 
+                  className="group relative w-16 h-16 rounded-full transition-all duration-700 transform hover:scale-105"
+                  title="Join my fan club"
+                >
+                  {/* Main Moon Surface - Realistic lunar colors */}
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-br from-gray-300 via-gray-350 to-gray-400 shadow-lg">
+                    {/* Realistic shadows and highlights */}
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-transparent via-gray-400/20 to-gray-500/40"></div>
+                    
+                    {/* Mare (dark patches) - like real lunar seas */}
+                    <div className="absolute top-2 right-1 w-6 h-8 bg-gray-500/30 rounded-full transform rotate-12"></div>
+                    <div className="absolute bottom-1 left-2 w-4 h-5 bg-gray-500/25 rounded-full transform -rotate-6"></div>
+                    
+                    {/* Realistic crater patterns */}
+                    {/* Large prominent crater (like Tycho) */}
+                    <div className="absolute top-3 left-3 w-3 h-3 bg-gray-500/20 rounded-full shadow-inner border border-gray-400/10"></div>
+                    
+                    {/* Medium craters */}
+                    <div className="absolute top-8 right-2 w-2 h-2 bg-gray-500/15 rounded-full shadow-inner"></div>
+                    <div className="absolute bottom-4 left-4 w-2.5 h-2.5 bg-gray-500/18 rounded-full shadow-inner"></div>
+                    
+                    {/* Small crater cluster */}
+                    <div className="absolute top-6 left-8 w-1 h-1 bg-gray-500/12 rounded-full"></div>
+                    <div className="absolute top-7 left-9 w-0.5 h-0.5 bg-gray-500/10 rounded-full"></div>
+                    <div className="absolute top-10 left-7 w-1 h-1 bg-gray-500/12 rounded-full"></div>
+                    
+                    {/* Tiny surface details */}
+                    <div className="absolute top-5 right-4 w-0.5 h-0.5 bg-gray-500/8 rounded-full"></div>
+                    <div className="absolute bottom-3 right-3 w-0.5 h-0.5 bg-gray-500/8 rounded-full"></div>
+                  </div>
+                  
+                  {/* Subtle terminator line (day/night boundary) */}
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-r from-transparent via-transparent to-gray-600/20"></div>
+                  
+                  {/* Very subtle glow - like moonlight */}
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-100/5 via-transparent to-transparent group-hover:from-blue-100/10 transition-all duration-700"></div>
+                  
+                  {/* Very subtle outer atmosphere glow */}
+                  <div className="absolute -inset-1 bg-gradient-to-r from-blue-50/10 to-purple-50/10 rounded-full blur-sm opacity-0 group-hover:opacity-30 transition-opacity duration-700"></div>
+                </button>
+              </SignUpButton>
+              
+              {/* Minimal tooltip */}
+              <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                <div className="bg-black/60 text-gray-300 text-xs px-2 py-1 rounded backdrop-blur-sm">
+                  Fan club
+                </div>
+              </div>
+            </motion.div>
+          )}
+          
+          {hasAnyUserSession && (
+            <motion.div
+              className="absolute top-6 right-6 z-20"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 2, delay: 1 }}
+            >
+              <div className="relative">
+                <UserButton 
+                  appearance={{
+                    elements: {
+                      avatarBox: "w-16 h-16 rounded-full opacity-0",
+                      userButtonTrigger: "w-16 h-16 rounded-full focus:shadow-none",
+                    }
+                  }}
+                />
+                
+                {/* Custom Blood Moon Overlay */}
+                <div className="absolute inset-0 w-16 h-16 rounded-full cursor-pointer pointer-events-none">
+                  {/* Blood Moon - Lunar Eclipse Effect */}
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-br from-red-900 via-red-800 to-red-950 shadow-lg shadow-red-900/50 transition-all duration-300 hover:shadow-red-800/60 hover:scale-105">
+                    {/* Blood moon atmospheric glow */}
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-red-700/30 via-red-800/20 to-red-950/40"></div>
+                    
+                    {/* Mare (dark patches) - now darker red */}
+                    <div className="absolute top-2 right-1 w-6 h-8 bg-red-950/60 rounded-full transform rotate-12"></div>
+                    <div className="absolute bottom-1 left-2 w-4 h-5 bg-red-950/50 rounded-full transform -rotate-6"></div>
+                    
+                    {/* Blood moon crater patterns - darker */}
+                    <div className="absolute top-3 left-3 w-3 h-3 bg-red-950/40 rounded-full shadow-inner border border-red-800/20"></div>
+                    <div className="absolute top-8 right-2 w-2 h-2 bg-red-950/35 rounded-full shadow-inner"></div>
+                    <div className="absolute bottom-4 left-4 w-2.5 h-2.5 bg-red-950/38 rounded-full shadow-inner"></div>
+                    
+                    {/* Small crater cluster - blood moon style */}
+                    <div className="absolute top-6 left-8 w-1 h-1 bg-red-950/25 rounded-full"></div>
+                    <div className="absolute top-7 left-9 w-0.5 h-0.5 bg-red-950/20 rounded-full"></div>
+                    <div className="absolute top-10 left-7 w-1 h-1 bg-red-950/25 rounded-full"></div>
+                    
+                    {/* Earth's shadow gradient (eclipse effect) */}
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-transparent via-red-950/30 to-red-950/60"></div>
+                    
+                    {/* Atmospheric refraction glow */}
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-orange-600/15 via-transparent to-transparent"></div>
+                  </div>
+                  
+                  {/* Blood moon outer atmosphere */}
+                  <div className="absolute -inset-1 bg-gradient-to-r from-red-600/20 to-orange-600/15 rounded-full blur-sm"></div>
+                  
+                  {/* Subtle pulsing effect */}
+                  <div className="absolute -inset-2 bg-gradient-to-r from-red-500/10 to-red-700/10 rounded-full blur-md animate-pulse"></div>
+                </div>
+              </div>
+              
+              {/* Blood moon tooltip */}
+              <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2">
+                <div className="bg-black/60 text-red-300 text-xs px-2 py-1 rounded backdrop-blur-sm">
+                  #1 Fan
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </>
+      )}
+
       <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 text-center">
         <motion.h1
           className="mb-6 text-6xl font-bold tracking-tighter sm:text-7xl lg:text-8xl font-nasalization"

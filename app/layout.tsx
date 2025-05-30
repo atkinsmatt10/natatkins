@@ -1,11 +1,39 @@
 import "@/styles/globals.css"
 import { Inter, Orbitron } from "next/font/google"
 import { Analytics } from '@vercel/analytics/next'
-import { ServiceWorkerRegistration, PWAInstaller } from './components/pwa-components'
+import { ServiceWorkerRegistration } from './components/pwa-components'
+import {
+  ClerkProvider,
+  SignInButton,
+  SignUpButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/nextjs"
 import type React from "react" // Import React
 
 const inter = Inter({ subsets: ["latin"] })
 const orbitron = Orbitron({ subsets: ["latin"] })
+
+// Custom space-themed text for Clerk components
+const spaceClerkLocalization = {
+  signUp: {
+    start: {
+      title: "Join the Nate Atkins Fan Club",
+      subtitle: "Ready to travel with me to space? 🚀",
+      actionText: "Already a fan?",
+      actionLink: "Sign in",
+    },
+  },
+  signIn: {
+    start: {
+      title: "Welcome Back, Space Traveler",
+      subtitle: "Continue your cosmic journey with Nate Atkins",
+      actionText: "Not a fan yet?",
+      actionLink: "Join the fan club",
+    },
+  },
+}
 
 export default function RootLayout({
   children,
@@ -13,14 +41,15 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <ServiceWorkerRegistration />
-        {children}
-        <PWAInstaller />
-        <Analytics />
-      </body>
-    </html>
+    <ClerkProvider localization={spaceClerkLocalization}>
+      <html lang="en">
+        <body className={inter.className}>
+          <ServiceWorkerRegistration />
+          {children}
+          <Analytics />
+        </body>
+      </html>
+    </ClerkProvider>
   )
 }
 
