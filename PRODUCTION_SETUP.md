@@ -73,15 +73,20 @@ Since you're using Vercel, you'll need to update the environment variables there
    - Update the production environment variables:
      - `CLERK_SECRET_KEY` → your production secret key
      - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` → your production publishable key
+     - `NEXT_PUBLIC_VAPID_PUBLIC_KEY` → your push notification public key
+     - `VAPID_PRIVATE_KEY` → your push notification private key
+     - `VAPID_SUBJECT` → optional contact subject, such as `mailto:nateatkins10@gmail.com`
 
-2. **Redeploy your application** after updating the environment variables
+2. **Confirm the build runtime** uses Node.js `>=20.9.0`
+
+3. **Redeploy your application** after updating the environment variables
 
 ## Step 6: Configure authorizedParties (Security)
 
-For enhanced security, update your middleware to include authorized parties:
+The app uses `proxy.ts` for Clerk request handling in Next.js 16. Keep the authorized party restriction in that file:
 
 ```typescript
-// middleware.ts
+// proxy.ts
 import { clerkMiddleware } from "@clerk/nextjs/server";
 
 export default clerkMiddleware({
@@ -127,6 +132,7 @@ export const config = {
 **Build/deployment errors:**
 - Restart your development server: `pnpm dev`
 - Clear Next.js cache: `rm -rf .next`
+- Run `pnpm audit`, `pnpm typecheck`, and `pnpm build`
 - Redeploy on Vercel after env var changes
 
 ## Quick Checklist
@@ -137,7 +143,7 @@ export const config = {
 - [ ] Updated `.env.local` with production keys
 - [ ] Updated Vercel environment variables
 - [ ] Configured OAuth providers for production (if using)
-- [ ] Added `authorizedParties` to middleware
+- [ ] Confirmed `authorizedParties` in `proxy.ts`
 - [ ] Waited for DNS propagation (up to 24 hours)
 - [ ] Clicked "Deploy certificates" in Clerk Dashboard
 - [ ] Tested production authentication flow

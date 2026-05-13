@@ -2,18 +2,11 @@ import "@/styles/globals.css"
 import { Inter, Orbitron } from "next/font/google"
 import { Analytics } from '@vercel/analytics/next'
 import { ServiceWorkerRegistration } from './components/pwa-components'
-import {
-  ClerkProvider,
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/nextjs"
+import { ClerkProvider } from "@clerk/nextjs"
 import type React from "react" // Import React
 
 const inter = Inter({ subsets: ["latin"] })
-const orbitron = Orbitron({ subsets: ["latin"] })
+const orbitron = Orbitron({ subsets: ["latin"], variable: "--font-orbitron" })
 
 // Custom space-themed text for Clerk components
 const spaceClerkLocalization = {
@@ -43,7 +36,7 @@ export default function RootLayout({
   return (
     <ClerkProvider localization={spaceClerkLocalization}>
       <html lang="en">
-        <body className={inter.className}>
+        <body className={`${inter.className} ${orbitron.variable}`}>
           <ServiceWorkerRegistration />
           {children}
           <Analytics />
@@ -54,6 +47,7 @@ export default function RootLayout({
 }
 
 export const metadata = {
+  metadataBase: new URL('https://natatkins.com'),
   title: {
     default: "Nate Atkins's corner of the internet",
     template: '%s | Nate Atkins'

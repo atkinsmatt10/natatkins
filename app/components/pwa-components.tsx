@@ -3,13 +3,22 @@
 import { useEffect, useState } from 'react'
 import { subscribeUser, unsubscribeUser, sendNotification } from '../actions'
 
+type SerializablePushSubscription = {
+  endpoint: string
+  expirationTime?: number | null
+  keys: {
+    p256dh: string
+    auth: string
+  }
+}
+
 export function PWAInstaller() {
   const [isIOS, setIsIOS] = useState(false)
   const [isStandalone, setIsStandalone] = useState(false)
 
   useEffect(() => {
     setIsIOS(
-      /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream
+      /iPad|iPhone|iPod/.test(navigator.userAgent) && !('MSStream' in window)
     )
     setIsStandalone(window.matchMedia('(display-mode: standalone)').matches)
   }, [])
@@ -137,7 +146,9 @@ export function PushNotificationManager() {
       setSubscription(sub)
       
       addDebugInfo('📤 Sending subscription to server...')
-      const result = await subscribeUser(sub)
+      const result = await subscribeUser(
+        sub.toJSON() as SerializablePushSubscription
+      )
       addDebugInfo(`Server response: ${JSON.stringify(result)}`)
       
       if (result.success) {

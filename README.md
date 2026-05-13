@@ -1,226 +1,153 @@
 # Nate Atkins - Artist Portfolio PWA
 
-A modern Progressive Web App (PWA) showcasing Nate Atkins' digital art and space-themed creations.
+A Next.js Progressive Web App for Nate Atkins' portfolio, fan club, Clerk authentication, and browser push notifications.
 
-## 🚀 Features
+## Features
 
-- **Progressive Web App** - Install on any device like a native app
-- **Push Notifications** - Real-time updates and portfolio notifications
-- **Responsive Design** - Beautiful on desktop, tablet, and mobile
-- **Space Theme** - Cosmic design with animated stars and gradients
-- **Service Worker** - Offline functionality and fast loading
-- **Custom Icons** - Dynamic space-themed app icons
+- Installable PWA with custom app icons and service worker caching
+- Space-themed portfolio pages with responsive layouts
+- Clerk authentication and billing pages for fan club access
+- Browser push notifications backed by VAPID keys
+- Vercel Analytics integration
 
-## 🛠️ Tech Stack
+## Tech Stack
 
-- **Next.js 15** - React framework with App Router
-- **TypeScript** - Type-safe development
-- **Tailwind CSS** - Utility-first styling
-- **Web Push API** - Native push notifications
-- **Service Workers** - Offline support and caching
+- **Next.js 16** with the App Router and proxy-based Clerk middleware
+- **React 19** and **TypeScript 6**
+- **Tailwind CSS 4** with `@tailwindcss/postcss`
+- **Clerk 7** for authentication and billing UI
+- **PushForge** for Web Push message signing
+- **pnpm 11** for dependency management
 
-## 📱 PWA Capabilities
+## Prerequisites
 
-- **Installable** - Users can install from any modern browser
-- **Offline Ready** - Basic functionality works without internet
-- **Push Notifications** - Engage users with updates
-- **App-like Experience** - Runs in standalone window
-- **Cross-Platform** - Works on iOS, Android, Windows, macOS
+- Node.js `>=20.9.0`
+- pnpm `11.1.1`
 
-## 🔧 Setup
+The package manager is pinned in `package.json`. If pnpm is not available locally, enable Corepack first:
 
-### Prerequisites
+```bash
+corepack enable
+corepack prepare pnpm@11.1.1 --activate
+```
 
-- Node.js 18+ 
-- npm or pnpm
+## Local Setup
 
-### Installation
+1. Clone the repository:
 
-1. **Clone the repository**
    ```bash
-   git clone <your-repo-url>
-   cd artist-portfolio
+   git clone git@github.com:atkinsmatt10/natatkins.git
+   cd natatkins
    ```
 
-2. **Install dependencies**
+2. Install dependencies:
+
    ```bash
-   npm install
-   # or
    pnpm install
    ```
 
-3. **Generate VAPID keys for push notifications**
-   ```bash
-   npx web-push generate-vapid-keys
-   ```
+3. Create `.env.local`:
 
-4. **Create environment variables**
-   Create `.env.local` with your VAPID keys:
    ```env
+   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_your_publishable_key_here
+   CLERK_SECRET_KEY=sk_test_your_secret_key_here
+
    NEXT_PUBLIC_VAPID_PUBLIC_KEY=your_public_key_here
    VAPID_PRIVATE_KEY=your_private_key_here
+   VAPID_SUBJECT=mailto:nateatkins10@gmail.com
+
+   # Optional local override after enabling Clerk billing in development
+   NEXT_PUBLIC_ENABLE_CLERK_BILLING=true
    ```
 
-5. **Run development server**
+4. Start development:
+
    ```bash
-   npm run dev
-   # or for PWA testing with HTTPS:
-   npm run dev -- --experimental-https
+   pnpm dev
    ```
 
-## 🌐 Deployment
+Open [http://localhost:3000](http://localhost:3000).
 
-### Vercel (Recommended)
+For local PWA testing with HTTPS:
 
-1. **Push to GitHub**
-   ```bash
-   git add .
-   git commit -m "Add PWA functionality"
-   git push origin main
-   ```
-
-2. **Deploy to Vercel**
-   - Connect your GitHub repository to Vercel
-   - Add environment variables in Vercel dashboard
-   - Deploy automatically on push
-
-3. **Configure Environment Variables**
-   In Vercel dashboard, add:
-   - `NEXT_PUBLIC_VAPID_PUBLIC_KEY`
-   - `VAPID_PRIVATE_KEY`
-
-### Other Platforms
-
-The app works on any platform that supports Node.js:
-- Netlify
-- Railway
-- DigitalOcean App Platform
-- AWS Amplify
-
-## 📱 PWA Installation
-
-### For Users
-
-**Desktop (Chrome/Edge):**
-- Visit the site
-- Click the install icon in the address bar
-- Or: Menu → "Install [App Name]"
-
-**Mobile (Android):**
-- Visit the site in Chrome
-- Tap "Add to Home Screen" banner
-
-**Mobile (iOS Safari):**
-- Visit the site
-- Tap the share button
-- Select "Add to Home Screen"
-
-## 🔔 Push Notifications
-
-### Sending Notifications
-
-**From Code:**
-```typescript
-import { sendNotification } from '@/app/actions'
-
-await sendNotification("New artwork uploaded!")
-```
-
-**Via API:**
 ```bash
-curl -X POST https://your-domain.com/api/send-notification \
-  -H "Content-Type: application/json" \
-  -d '{"message": "Portfolio updated!"}'
+pnpm dev -- --experimental-https
 ```
 
-### Use Cases
+## VAPID Keys
 
-- New portfolio uploads
-- Contact form submissions
-- Milestone celebrations
-- Blog post notifications
+Push notifications require `NEXT_PUBLIC_VAPID_PUBLIC_KEY` and `VAPID_PRIVATE_KEY`.
 
-## 🎨 Customization
+This project now sends push messages with PushForge instead of the older `web-push` package. Existing base64url VAPID keys generated by `web-push` are still supported. PushForge JSON private JWK values are also supported if `VAPID_PRIVATE_KEY` starts with `{`.
 
-### Icons
-Icons are dynamically generated using Next.js. Customize in:
-- `app/icon.tsx` - Favicon (32x32)
-- `app/icon-192/route.tsx` - PWA icon (192x192)
-- `app/icon-512/route.tsx` - PWA icon (512x512)
-- `app/apple-icon.tsx` - iOS icon
+## Common Commands
 
-### Manifest
-PWA settings in `app/manifest.ts`:
-- App name and description
-- Theme colors
-- Display mode
-- Orientation
-
-### Service Worker
-Caching and offline behavior in `public/sw.js`
-
-## 🔒 Security
-
-- HTTPS required for PWA features
-- VAPID keys for authenticated push notifications
-- Content Security Policy headers
-- Service worker security headers
-
-## 📁 Project Structure
-
-```
-├── app/
-│   ├── components/
-│   │   └── pwa-components.tsx    # PWA functionality
-│   ├── api/
-│   │   └── send-notification/    # API endpoint
-│   ├── actions.ts                # Server actions
-│   ├── manifest.ts              # PWA manifest
-│   ├── icon*.tsx                # Dynamic icons
-│   └── layout.tsx               # Root layout
-├── public/
-│   └── sw.js                    # Service worker
-└── PWA_SETUP.md                 # Detailed setup guide
-```
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-**Notifications not working:**
-- Ensure HTTPS is enabled
-- Check VAPID keys are correct
-- Verify browser permissions
-
-**PWA not installable:**
-- Manifest must be accessible
-- Icons must load correctly
-- Service worker must be registered
-
-**Service worker errors:**
-- Check browser console
-- Verify `/sw.js` is accessible
-- Ensure proper Content-Type headers
-
-### Development
-
-For local PWA testing:
 ```bash
-npm run dev -- --experimental-https
+pnpm lint
+pnpm typecheck
+pnpm build
+pnpm audit
 ```
 
-## 📄 License
+## Deployment
 
-MIT License - feel free to use for your own portfolio!
+The Vercel build command is:
 
-## 🤝 Contributing
+```bash
+pnpm build
+```
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
+Configure these environment variables in Vercel:
 
----
+- `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
+- `CLERK_SECRET_KEY`
+- `NEXT_PUBLIC_VAPID_PUBLIC_KEY`
+- `VAPID_PRIVATE_KEY`
+- `VAPID_SUBJECT` (optional)
 
-**Built with ❤️ by Nate Atkins**  
-*Currently on Earth, excited to explore the stars* 🌟 
+The app uses `proxy.ts` for Clerk request handling, which is the Next.js 16 convention replacing root `middleware.ts`.
+
+`NEXT_PUBLIC_ENABLE_CLERK_BILLING` is only needed when you want to render Clerk's live pricing table in local development. Production renders the pricing table by default.
+
+## Security Notes
+
+- `vercel` is intentionally not bundled as an app dependency; use Vercel's Git integration or a local/global CLI outside production dependencies.
+- `web-push` was replaced with PushForge to remove the vulnerable transitive dependency chain.
+- `postcss` is pinned through pnpm overrides so the project does not resolve a vulnerable `8.4.x` release through nested dependencies.
+- `.clerk/` is ignored because local Clerk configuration can contain sensitive values.
+
+## Project Structure
+
+```text
+app/
+  api/send-notification/    # Notification API route
+  components/               # App-specific UI components
+  exclusive/                # Fan club protected content
+  pricing/                  # Clerk billing page
+  actions.ts                # Server actions for push subscriptions
+  manifest.ts               # PWA manifest
+  icon*.tsx                 # Dynamic icons
+components/ui/              # Reusable UI primitives
+public/sw.js                # Service worker
+proxy.ts                    # Clerk proxy middleware for Next.js 16
+```
+
+## Troubleshooting
+
+Notifications not working:
+
+- Confirm the app is served over HTTPS, except for localhost testing.
+- Confirm `NEXT_PUBLIC_VAPID_PUBLIC_KEY` and `VAPID_PRIVATE_KEY` are set.
+- Check browser notification permissions.
+
+Pricing table not rendering locally:
+
+- Clerk billing must be enabled for the local Clerk application.
+- Set `NEXT_PUBLIC_ENABLE_CLERK_BILLING=true` after enabling billing locally.
+- Confirm the Clerk environment variables point at the intended Clerk instance.
+
+Deployment failing on Vercel:
+
+- Run `pnpm audit`, `pnpm typecheck`, and `pnpm build` locally.
+- Confirm Vercel is using Node.js `>=20.9.0`.
+- Confirm the Vercel project has the same Clerk and VAPID environment variables listed above.

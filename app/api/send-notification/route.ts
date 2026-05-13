@@ -3,7 +3,7 @@ import { sendNotification } from '@/app/actions'
 
 export async function POST(request: NextRequest) {
   try {
-    const { message, title } = await request.json()
+    const { message } = await request.json()
     
     if (!message) {
       return NextResponse.json(

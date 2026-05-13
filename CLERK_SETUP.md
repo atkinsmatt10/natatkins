@@ -7,7 +7,7 @@ This guide walks you through setting up Clerk authentication in your Next.js App
 The following Clerk integration has been implemented following the latest best practices:
 
 1. **Installed Clerk**: `@clerk/nextjs@latest` has been added to your dependencies
-2. **Middleware**: `middleware.ts` created with `clerkMiddleware()` from `@clerk/nextjs/server`
+2. **Proxy middleware**: `proxy.ts` created with `clerkMiddleware()` from `@clerk/nextjs/server`
 3. **Layout Provider**: `<ClerkProvider>` wraps your app in `app/layout.tsx`
 4. **Authentication UI**: Sign in/up buttons and user button added to the header
 5. **Protected Route**: Example protected page at `/protected` 
@@ -64,7 +64,7 @@ pnpm dev
 
 ### Files Modified/Created
 
-- `middleware.ts` - Clerk middleware using `clerkMiddleware()`
+- `proxy.ts` - Clerk proxy middleware using `clerkMiddleware()`
 - `app/layout.tsx` - Added `<ClerkProvider>` and authentication UI
 - `app/page.tsx` - Added authentication status demo
 - `app/protected/page.tsx` - Example protected route
@@ -73,7 +73,7 @@ pnpm dev
 ### Key Features Implemented
 
 1. **Modern Middleware**: Uses `clerkMiddleware()` (not the deprecated `authMiddleware`)
-2. **App Router Compatible**: All code follows Next.js 13+ App Router patterns
+2. **App Router Compatible**: All code follows the Next.js 16 App Router and proxy conventions
 3. **Server-Side Auth**: Demonstrates `auth()` and `currentUser()` from `@clerk/nextjs/server`
 4. **Client Components**: Uses `<SignedIn>`, `<SignedOut>`, `<UserButton>`, etc.
 5. **Modal Auth**: Sign in/up buttons open in modals for better UX
@@ -87,7 +87,7 @@ pnpm dev
 
 ## 🔒 Security Features
 
-- **Automatic Route Protection**: Middleware protects all routes by default
+- **Request-Level Auth Handling**: Clerk proxy middleware runs for app and API routes through `proxy.ts`
 - **Server-Side Verification**: User authentication checked on the server
 - **Secure Tokens**: Clerk handles all token management securely
 - **Session Management**: Automatic session refresh and logout
@@ -115,7 +115,7 @@ pnpm dev
 1. **Environment Variables**: Ensure `.env.local` is in project root
 2. **Clerk Keys**: Verify keys are copied correctly from dashboard
 3. **Build Errors**: Make sure you're using the latest `@clerk/nextjs` version
-4. **Middleware**: Ensure `middleware.ts` is in the project root (not in app/)
+4. **Proxy**: Ensure `proxy.ts` is in the project root (not in app/)
 
 ### Support Resources
 
@@ -126,7 +126,7 @@ pnpm dev
 ## ✨ Current Implementation Status
 
 ✅ Clerk SDK installed (`@clerk/nextjs@latest`)  
-✅ Middleware configured with `clerkMiddleware()`  
+✅ Proxy middleware configured with `clerkMiddleware()`  
 ✅ App wrapped with `<ClerkProvider>`  
 ✅ Authentication UI components added  
 ✅ Protected route example created  

@@ -1,11 +1,10 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@config "../tailwind.config.ts";
 
 /* Custom font - Orbitron (Free Google Font alternative to Nasalization) */
 @layer base {
   .font-nasalization {
-    font-family: "Orbitron", monospace;
+    font-family: var(--font-orbitron), monospace;
     font-style: normal;
     font-weight: 400;
   }

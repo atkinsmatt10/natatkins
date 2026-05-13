@@ -160,6 +160,16 @@ Before going live:
 3. Verify access control works correctly
 4. Test plan upgrades/downgrades
 
+### Local Development
+
+The pricing page avoids rendering Clerk's live `<PricingTable />` in local
+development unless billing is explicitly enabled. After enabling Clerk billing
+for your development instance, add this to `.env.local`:
+
+```bash
+NEXT_PUBLIC_ENABLE_CLERK_BILLING=true
+```
+
 ### Example Test Plan Names:
 - `basic_test` - Basic Explorer (Test)
 - `premium_test` - Premium Space Traveler (Test)

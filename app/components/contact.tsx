@@ -48,7 +48,7 @@ export default function Contact() {
         >
           <h2 className="mb-4 text-3xl font-bold tracking-tighter sm:text-4xl">Get in Touch</h2>
           <p className="mb-8 text-gray-400">
-            Interested in collaborating or commissioning a piece? Let's create something amazing together.
+            Interested in collaborating or commissioning a piece? Let&apos;s create something amazing together.
           </p>
         </motion.div>
         <motion.div

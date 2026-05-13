@@ -3,6 +3,17 @@
 import { PricingTable } from '@clerk/nextjs'
 import { motion } from 'framer-motion'
 
+const stars = Array.from({ length: 50 }, (_, index) => ({
+  left: `${(index * 37) % 100}%`,
+  top: `${(index * 53) % 100}%`,
+  animationDelay: `${((index * 11) % 30) / 10}s`,
+  animationDuration: `${2 + ((index * 7) % 20) / 10}s`,
+}))
+
+const shouldRenderPricingTable =
+  process.env.NODE_ENV === 'production' ||
+  process.env.NEXT_PUBLIC_ENABLE_CLERK_BILLING === 'true'
+
 export default function PricingPage() {
   return (
     <div className="min-h-screen bg-black text-white relative overflow-hidden">
@@ -10,15 +21,15 @@ export default function PricingPage() {
       <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-900 to-black">
         {/* Animated stars */}
         <div className="absolute inset-0">
-          {[...Array(50)].map((_, i) => (
+          {stars.map((star, i) => (
             <div
               key={i}
               className="absolute w-1 h-1 bg-white rounded-full animate-pulse"
               style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 3}s`,
-                animationDuration: `${2 + Math.random() * 2}s`,
+                left: star.left,
+                top: star.top,
+                animationDelay: star.animationDelay,
+                animationDuration: star.animationDuration,
               }}
             />
           ))}
@@ -98,7 +109,20 @@ export default function PricingPage() {
         >
           {/* Custom wrapper for the Clerk PricingTable */}
           <div className="pricing-table-wrapper">
-            <PricingTable />
+            {shouldRenderPricingTable ? (
+              <PricingTable />
+            ) : (
+              <div className="mx-auto max-w-2xl rounded-2xl border border-blue-500/30 bg-blue-950/30 p-8 text-center backdrop-blur-sm">
+                <h2 className="mb-4 text-2xl font-bold text-white">
+                  Billing Preview Disabled
+                </h2>
+                <p className="text-gray-300">
+                  Clerk billing is not enabled for this local development
+                  instance. Set NEXT_PUBLIC_ENABLE_CLERK_BILLING=true after
+                  enabling billing in Clerk to render the live pricing table.
+                </p>
+              </div>
+            )}
           </div>
         </motion.div>
 

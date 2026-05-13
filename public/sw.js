@@ -22,7 +22,7 @@ self.addEventListener('notificationclick', function (event) {
 })
 
 // Basic caching strategy
-self.addEventListener('install', function(event) {
+self.addEventListener('install', function() {
   console.log('Service Worker installing.')
   self.skipWaiting()
 })
@@ -54,9 +54,6 @@ self.addEventListener('fetch', function(event) {
   event.respondWith(
     fetch(event.request)
       .then(response => {
-        // Clone the response since it can only be used once
-        const responseClone = response.clone()
-        
         // If we got a valid response, return it
         if (response && response.status === 200) {
           return response

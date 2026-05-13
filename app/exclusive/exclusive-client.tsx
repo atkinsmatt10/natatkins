@@ -2,6 +2,13 @@
 
 import { motion } from 'framer-motion'
 
+const stars = Array.from({ length: 30 }, (_, index) => ({
+  left: `${(index * 41) % 100}%`,
+  top: `${(index * 59) % 100}%`,
+  animationDelay: `${((index * 13) % 30) / 10}s`,
+  animationDuration: `${2 + ((index * 9) % 20) / 10}s`,
+}))
+
 interface ExclusiveClientProps {
   userId: string | null
   hasPremiumAccess: boolean
@@ -83,15 +90,15 @@ export default function ExclusiveClient({
       {/* Starfield Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-900 to-black">
         <div className="absolute inset-0">
-          {[...Array(30)].map((_, i) => (
+          {stars.map((star, i) => (
             <div
               key={i}
               className="absolute w-1 h-1 bg-white rounded-full animate-pulse"
               style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 3}s`,
-                animationDuration: `${2 + Math.random() * 2}s`,
+                left: star.left,
+                top: star.top,
+                animationDelay: star.animationDelay,
+                animationDuration: star.animationDuration,
               }}
             />
           ))}
