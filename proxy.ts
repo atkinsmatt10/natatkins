@@ -1,9 +1,17 @@
 import { clerkMiddleware } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 
-export default clerkMiddleware({
-  // For enhanced security in production
-  authorizedParties: ['https://natatkins.com'],
-});
+const hasClerkPublishableKey = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
+
+export default hasClerkPublishableKey
+  ? clerkMiddleware({
+      ...(process.env.NODE_ENV === "production"
+        ? { authorizedParties: ["https://natatkins.com"] }
+        : {}),
+    })
+  : function publicProxy() {
+      return NextResponse.next();
+    };
 
 export const config = {
   matcher: [

@@ -7,6 +7,7 @@ import type React from "react" // Import React
 
 const inter = Inter({ subsets: ["latin"] })
 const orbitron = Orbitron({ subsets: ["latin"], variable: "--font-orbitron" })
+const hasClerkPublishableKey = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY)
 
 // Custom space-themed text for Clerk components
 const spaceClerkLocalization = {
@@ -33,15 +34,23 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const document = (
+    <html lang="en">
+      <body className={`${inter.className} ${orbitron.variable}`}>
+        <ServiceWorkerRegistration />
+        {children}
+        <Analytics />
+      </body>
+    </html>
+  )
+
+  if (!hasClerkPublishableKey) {
+    return document
+  }
+
   return (
     <ClerkProvider localization={spaceClerkLocalization}>
-      <html lang="en">
-        <body className={`${inter.className} ${orbitron.variable}`}>
-          <ServiceWorkerRegistration />
-          {children}
-          <Analytics />
-        </body>
-      </html>
+      {document}
     </ClerkProvider>
   )
 }

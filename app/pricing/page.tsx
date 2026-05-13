@@ -10,9 +10,11 @@ const stars = Array.from({ length: 50 }, (_, index) => ({
   animationDuration: `${2 + ((index * 7) % 20) / 10}s`,
 }))
 
+const hasClerkPublishableKey = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY)
 const shouldRenderPricingTable =
-  process.env.NODE_ENV === 'production' ||
-  process.env.NEXT_PUBLIC_ENABLE_CLERK_BILLING === 'true'
+  hasClerkPublishableKey &&
+  (process.env.NODE_ENV === 'production' ||
+    process.env.NEXT_PUBLIC_ENABLE_CLERK_BILLING === 'true')
 
 export default function PricingPage() {
   return (
